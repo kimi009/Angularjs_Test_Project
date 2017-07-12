@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = app>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div ng-controller="test">
+        执行javascript 表达式<br>
+        <input type="text" ng-model="expr1">
+        <button ng-click="testExpr1(expr1)">计算</button>
+        <br>
+        执行angular表达式<br>
+        <input type="text" ng-model="expr2">
+        <button ng-bind="$eval(expr2)"></button>
+        <span></span>
+        <select ng-model="ab" ng-options="txt.id as txt.name for txt in data">
+            <option value="">---Selected---</option>
+        </select>
+        <select ng-model="txt.id" ng-options="txt.id as txt.name group by txt.key for txt in data">
+            <option value="">---selected---</option>
+        </select>
+    </div>
+</body>
+<script src="../lib/10_angular/angular.js"></script>
+<script>
+    angular.module('app',[]).controller('test',['$scope','$window',function ($scope,$window) {
+        $scope.expr1 = 20;
+        $scope.expr2 = '20 + 1 | number:0';
+        $scope.testExpr1 = function (expr) {
+            var newv = parseInt(expr) + 1;
+            $window.alert('result is ' + newv);
+        };
+        $scope.data = [
+            {id:'1',name:'A',key:'first'},
+            {id:'2',name:'B',key:'last'},
+            {id:'3',name:'C',key:'first'}
+        ];
+    }]);
+</script>
+</html>

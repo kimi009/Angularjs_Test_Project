@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div ng-view></div>
+</body>
+<script src="../lib/10_angular/angular.js"></script>
+<script src="../lib/angular-route.js"></script>
+<script>
+    angular.module('app',['ngRoute']).controller('c1',['$scope',function ($scope) {
+        $scope.students = students;
+    }]).controller('c2',['$scope','$routeParams',function ($scope,$routeParams) {
+        for(var i = 0;i<students.length;i++){
+            if(students[i].stuId == $routeParams.id){
+                $scope.student = students[i];
+                break;
+            }
+        }
+    }]).config(['$routeProvider',function ($routeProvider) {
+        $routeProvider.when('/',{
+            controller:'c1',
+            templateUrl:'./1.html'
+        }).when('/view/:id',{
+            controller:'c2',
+            templateUrl:'./2.html',
+            publicAccess:true
+        }).otherwise({redirectTo:'/'});
+    }]);
+
+    var students = [
+        {stuId:1000,name:'张三',sex:'男',score:88},
+        {stuId:1002,name:'里斯',sex:'女',score:881},
+        {stuId:1003,name:'发射点',sex:'女',score:288},
+        {stuId:1004,name:'分为氛围',sex:'男',score:848}
+    ];
+</script>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="dT">
+    <div ng-show="show">Test</div>
+    <ts-parent>
+        <div>{{ptip}}</div>
+        <ts-child>
+            <div>{{ctip}}</div>
+        </ts-child>
+        <button ng-click="click()">换位</button>
+    </ts-parent>
+</body>
+<script src="../lib/10_angular/angular.js"></script>
+<script>
+    angular.module('app',[]).controller('dT',function ($scope) {
+        $scope.show = false;
+    }).directive('tsParent',function () {
+        return {
+            restrict:'EAC',
+            controller:function ($scope, $compile, $http) {
+                this.addChild = function (c) {   //这里一定要是this否则儿子没法访问
+                    $scope.ptip = '今天天气不错';
+                    $scope.click = function () {
+                        $scope.temp = $scope.ptip;
+                        $scope.ptip = c.ctip;
+                        c.ctip = $scope.temp;
+                    }
+                }
+            }
+        }
+    }).directive('tsChild',function () {
+        return{
+            restrict:'EAC',
+            require:'^?tsParent',
+            link:function (scope, iEle, iAttr, ctrl) {
+                scope.ctip = '气温18度';
+                ctrl.addChild(scope);
+            }
+        }
+    })
+</script>
+</html>
